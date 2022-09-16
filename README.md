@@ -3,14 +3,14 @@ An online learning management system
 
 ## Features
 
-Allows Students and Tutors to create account
-Allow students to view courses, filter the courses by subject and enroll in the courses
-Allow students to view content of the courses once enrolled and be able to see his/her progress
+- Allows Students and Tutors to create account
+- Allow students to view courses, filter the courses by subject and enroll in the courses
+- Allow students to view content of the courses once enrolled and be able to see his/her progress
 
-Allow teachers to create account, login to their dashboard, create courses
-All teachers to create modules for particular courses and add content to the modules
+- Allow teachers to create account, login to their dashboard, create courses
+- All teachers to create modules for particular courses and add content to the modules
 
-Teachers dashboard and students dashboard are different
+Teachers dashboard and students dashboard are different(teachers: green, students: blue)
 
 ## How to run the project
 
@@ -35,6 +35,6 @@ Teachers dashboard and students dashboard are different
    `python manage.py runserver`
 
 ## Contact
-Email: [o.jeff3.a@gmail.com](mailto: o.jeff3.a@gmail.com)
+Email: o.jeff3.a@gmail.com
 Phone: [+254795067776](tel:+254795067776)
 website: [vstech.live](http://vstech.live)
