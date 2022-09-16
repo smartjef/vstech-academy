@@ -1,0 +1,137 @@
+{% extends "courses/manage/base.html" %}
+{% load course %}
+{% block title %}Module {{ module.order|add:1 }}: {{ module.title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+{% with course=module.course %}
+<h1 class="text-center border-bottom border-success border-1 pb-1 text-success my-3">Course "{{ course.title }}"</h1>
+  <div class="row">
+    <div class="col-sm-3 bg-light pl-2">
+        <h3 class="text-dark">Modules</h3>
+        <ul class="list-unstyled">
+          {% for m in course.modules.all %}
+            <li data-id='{{ m.id }}'>
+            <a href="{% url 'module_content_list' m.id %}" class='nav-link {% if m == module %}bg-success text-white {% else %}{ text-dark }{% endif %}'>
+                <span>
+                   <i class="fa fa-circle-o" aria-hidden="true"></i>{{ m.order|add:1 }} Module
+                </span><br>
+                <small class="ml-2">{{ m.title }}</small>
+            </a>
+            </li>
+        {% empty %}
+            <li>No modules yet.</li>
+        {% endfor %}
+        </ul>
+        <p><a href="{% url 'course_module_update' course.id %}" class="btn btn-primary btn-block my-3">Edit modules</a></p>
+    </div>
+    <div class="col-md-9 bg-white shadow">
+        <section>
+              <h4 class="my-3 font-weight-bold text-success">Module {{ module.order|add:1 }}: {{ module.title }}</h4>
+              <h5>Module contents:</h5>
+              <div id="module-contents">
+                {% for content in module.contents.all %}
+                  <div data-id="{{ content.id }}">
+                    {% with item=content.item %}
+                      <div class="row align-items-center bg-light justify-content-between mx-2 my-2 px-2 py-3">
+                        <div class="text-dark">
+                          <span class="text-success mx-2">
+                            {% if item|model_name == 'text' %}
+                              <i class="fas fa-indent fa-lg fa-fw"></i>
+                            {% elif item|model_name == 'image' %}
+                              <i class="fas fa-images fa-lg fa-fw"></i>
+                            {% elif item|model_name == 'video' %}
+                              <i class="fas fa-video fa-lg fa-fw"></i>
+                            {% elif item|model_name == 'file' %}
+                              <i class="fa fa-file" aria-hidden="true"></i>
+                            {% endif %}
+                          </span>
+                          {{ item }} ({{ item|model_name }})
+                        </div>
+                        <div class="row  align-items-center">
+                          <a href="{% url 'module_content_update' module.id item|model_name item.id %}" title="Edit Content" class="text-success"><i class="fas fa-pen-alt fa-fw"></i></a>
+                          <form action="{% url 'module_content_delete' content.id %}" method="post" class="text-right">
+                            {% csrf_token %}
+                            <button type="submit" class="btn text-danger" title="Delete content"><i class="fas fa-times fa-lg fa-fw"></i></button>
+                          </form>
+                        </div>
+                      </div>
+                    {% endwith %}
+                  </div>
+                {% empty %}
+                  <p>This module has no contents yet.</p>
+                {% endfor %}
+              </div>
+              <div class="card m-3 border-0">
+                <h4 class="font-weight-bold">Add new content:</h4>
+                <ul class="row align-items-center p-2 justify-content-between list-unstyled">
+                  <li>
+                    <a href="{% url 'module_content_create' module.id 'text' %}" title="add text" class="btn btn-primary px-4"><i class="fa fa-indent fa-sm" aria-hidden="true"></i> Text</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'module_content_create' module.id 'image' %}" title="add image" class="btn btn-success px-4"><i class="fas fa-images fa-xs fa-fw"></i> Image</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'module_content_create' module.id 'video' %}" title="add video" class="btn btn-info px-4"><i class="fas fa-video fa-xs fa-fw"></i> Video</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'module_content_create' module.id 'file' %}" title="add file" class="btn btn-warning px-4"><i class="fa fa-file fa-sm" aria-hidden="true"></i> File</a>
+                  </li>
+                </ul>
+              </div>
+          </section>
+
+    </div>
+</div>
+{% endwith %}
+{% endblock %}
+
+{% block domready %}
+  var options = {
+      method: 'POST',
+      mode: 'same-origin'
+  }
+
+  const moduleOrderUrl = '{% url "module_order" %}';
+
+  sortable('#modules', {
+    forcePlaceholderSize: true,
+    placeholderClass: 'placeholder'
+  })[0].addEventListener('sortupdate', function(e) {
+
+    modulesOrder = {};
+    var modules = document.querySelectorAll('#modules li');
+    modules.forEach(function (module, index) {
+      // update module index
+      modulesOrder[module.dataset.id] = index;
+      // update index in HTML element
+      module.querySelector('.order').innerHTML = index + 1;
+      // add new order to the HTTP request options
+      options['body'] = JSON.stringify(modulesOrder);
+
+      // send HTTP request
+      fetch(moduleOrderUrl, options)
+    });
+  });
+
+  const contentOrderUrl = '{% url "content_order" %}';
+
+  sortable('#module-contents', {
+    forcePlaceholderSize: true,
+    placeholderClass: 'placeholder'
+  })[0].addEventListener('sortupdate', function(e) {
+
+    contentOrder = {};
+    var contents = document.querySelectorAll('#module-contents div');
+    contents.forEach(function (content, index) {
+      // update content index
+      contentOrder[content.dataset.id] = index;
+      // add new order to the HTTP request options
+      options['body'] = JSON.stringify(contentOrder);
+
+      // send HTTP request
+      fetch(contentOrderUrl, options)
+    });
+  });
+
+{% endblock %}

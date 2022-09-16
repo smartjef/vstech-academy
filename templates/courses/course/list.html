@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Courses{% endblock %}
+{% block content %}
+<div class="container-fliud bg-primary" style="height: 100px;">
+
+</div>
+<div class="container-fluid bg-white pt-5">
+    {% if subjects %}
+    <h1 class="text-uppercase py-5 text-center text-primary">Our popular courses</h1>
+    <div class="row justify-content-center py-3">
+        <a href="{% url 'course_list' %}" class="nav-link border border-dark {% if not subject %}bg-warning{% endif %} rounded-pill ml-2 text-dark px-4">All</a>
+        {% for c in subjects %}
+            <a href="{% url 'course_list_subject' c.slug %}" class="nav-link border border-dark {% if c == subject %} bg-warning {% endif %} rounded-pill ml-2 text-dark">{{c.title}}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <p class="py-2 text-center text-dark font-weight-bold">{{ courses.all | length}} Course{{courses.all|length|pluralize}}</p>
+    {% if courses %}
+    <div class="row justify-content-center mb-4">
+        {% for course in courses %}
+            <div class="col-sm-2 m-2 p-0 bg-white" title="{{course.title}}">
+            <a href="{% url 'course_detail' course.slug %}" class="text-decoration-none text-dark">
+                <img src="{% if course.image %} {{course.image.url}} {% else %} {% static 'img/course1.png' %} {% endif %}" class="img-fluid p-0 m-0" alt="{{ course.title }}">
+                <div class="card-body p-2">
+                    <h5 class="font-weight-bold small text-uppercase">{{course.title}}</h5>
+                    <small class="m-0 p-0">By {{course.owner.get_full_name}} - {{course.subject}}</small>
+                    <small class="m-0 p-0">Modules({{course.modules.all|length}}) - <i class="fas fa-user-graduate fa-xs fa-fw"></i>({{course.students.all|length|add:350}})</small>
+                    <pre class="d-flex justify-content-between">{% if course.price %}KSH. {{course.price}}{% else %}<span class="badge badge-warning px-3 py-2 my-2" style="color: black;">Free{% endif %}</span><span class="badge badge-primary px-4 py-2 my-2">View</span></pre>
+                </div>
+            </a>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center py-5">No Course uploaded for this category yet</p>
+    {% endif %}
+</div>
+{% endblock %}

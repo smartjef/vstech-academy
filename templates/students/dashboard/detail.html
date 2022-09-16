@@ -1,0 +1,42 @@
+{% extends 'students/dashboard/base.html' %}
+{% load cache %}
+
+{% block title %}{{ object.title }} | {{module.title}}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 bg-light pl-2">
+            <h3 class="text-dark">Modules</h3>
+            <ul class="list-unstyled">
+            {% for m in object.modules.all %}
+                <li data-id='{{ m.id }}'>
+                <a href="{% url 'student_course_detail_module' object.id m.id %}" class='nav-link {% if m == module %}bg-primary text-white {% else %}{ text-dark }{% endif %}'>
+                    <span>
+                       <i class="fa fa-circle-o" aria-hidden="true"></i> Module <span class="order">{{ m.order|add:1 }}</span>
+                    </span><br>
+                    <small class="ml-2">{{ m.title }}</small>
+                </a>
+                </li>
+            {% empty %}
+                <li>No modules yet.</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-9 bg-white shadow shadow-primary">
+            <section>
+                <header><h3 class="text-primary m-2">{{ module.title }}</h3></header>
+                {% cache 600 module_contents module %}
+                {% for content in module.contents.all %}
+                    {% with item=content.item %}
+                    <h4 class="text-warning">{{ item.title }}</h>
+                    {{ item.render }}
+                    {% endwith %}
+                {% endfor %}
+                {% endcache %}
+            </section>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

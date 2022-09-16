@@ -1,0 +1,25 @@
+{% load static %}
+<nav class="row justify-content-around bg-primary w-100 position-absolute align-items-center">
+    <div>
+        <a href="/" class="nav-link font-weight-bold text-white"><img src="{% static 'img/VSTech logo.png' %}" height="80" alt="Logo">VSTech Academy</a>
+    </div>
+    <div>
+        <ul class="navbar navbar-fixed navbar-dark list-unstyled justify-content-end">
+            {% if user.is_superuser %}
+                <li><a href="{% url 'admin:index' %}" class="nav-link text-white">Admin</a></li>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'student_dashboard' %}" class="nav-link text-white">Dashboard</a></li>
+            {% else %}
+            <li><a href="/" class="active nav-link text-white">Home</a></li>
+            {% endif %}
+            <li><a href="{% url 'course_list' %}" class="nav-link text-white">Courses</a></li>
+            <li><a href="" class="nav-link text-white">Pricing</a></li>
+            {% if not user.is_authenticated %}
+                <li class="text-white font-weight-bold d-flex align-items-center"><a href="{% url 'account_signup' %}" class="nav-link rounded-pill btn-warning text-dark mr-2">Sign Up</a> OR <a href="{% url 'account_login' %}" class="ml-2 nav-link rounded-pill border border-light text-white">Sign In</a></li> 
+            {% else %}
+                <li><a href="{% url 'account_logout' %}" class="nav-link rounded-pill btn-danger text-white">Logout</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

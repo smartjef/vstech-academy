@@ -1,0 +1,94 @@
+{% load static %}
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <img src="{% static 'img/VSTech logo.png' %}" height="80" alt="Logo">
+        </div>
+        <div class="sidebar-brand-text mx-3">VSTech Academy</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'student_dashboard' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Shortcuts
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link" href=""  data-target="#collapseTwo"
+            aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-user-graduate fa-lg fa-fw"></i>
+            <span>Grades</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'student_course_list' %}">
+            <i class="fa fa-users fa-fw" aria-hidden="true"></i>
+            <span>Courses</span>
+        </a>
+    </li>
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+        <a class="nav-link" href="">
+            <i class="fas fa-school fa-fw"></i>
+            <span>Classes</span></a>
+    </li>
+
+    <!-- Nav Item - Tables -->
+    <li class="nav-item">
+        <a class="nav-link" href="">
+           <i class="fa fa-certificate fa-fw" aria-hidden="true"></i>
+            <span>Certificates</span></a>
+    </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Accounts
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+            aria-expanded="true" aria-controls="collapsePages">
+            <i class="fa fa-user-secret fa-fw" aria-hidden="true"></i>
+            <span>Accounts</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Account Auctions:</h6>
+                <a class="collapse-item" href="">Emails</a>
+                <a class="collapse-item" href="">Change password</a>
+                <a class="collapse-item" href="">Logout</a>
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Profiles:</h6>
+                <a class="collapse-item" href="">profile</a>
+                <a class="collapse-item" href="">edit profile</a>
+            </div>
+        </div>
+    </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>
