@@ -1,0 +1,44 @@
+{% extends "courses/manage/base.html" %}
+{% load static %}
+{% block title %}My courses{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <p class="text-right"> <a href="{% url 'course_create' %}" class="btn btn-success rounded-pill">Create new course</a> </p>
+  <header class="text-success border-bottom font-weight-bold text-center w-100 text-uppercase small"><h3>Manage {{user}}'s Courses:</h3></header>
+  <div class="row">
+    {% for course in object_list %}
+      <div class="card shadow border-0 m-2" style="max-width: 230px;">
+        <img src="{% if course.image %} {{course.image.url}} {% else %} {% static 'img/course1.png' %} {% endif %}" class="img-fluid p-0 m-0" alt="{{ course.title }}">
+        <h6 class="card-header font-weight-bold">{{ course.title }}</h6>
+        <div class="card-body p-0">
+          <small title="Date created" class="px-3">{{course.created}} | <i class="fas fa-user-graduate fa-xs fa-fw"></i>({{course.students.all.count}})</small>
+          <div class="row p-3">
+            <div class="col-sm-5 font-weight-bold text-dark">
+              Actions:
+            </div>
+            <div class="col-sm-7">
+              <a href="{% url 'course_edit' course.id %}" class="text-decoration-none text-success" title="Edit Course"><i class="fas fa-pen fa-sm fa-fw"></i></a>
+              <a href="{% url 'course_delete' course.id %}" class="text-decoration-none text-danger mx-2" title="Delete Course"><i class="fa fa-trash" aria-hidden="true"></i></a>
+              <a href="{% url 'student_course_detail' course.id %}" class="text-decoration-none text-primary" title="Preview Course"><i class="fas fa-eye fa-sm fa-fw"></i></a>  
+            </div>
+          </div>
+          <div class="row card-footer py-2 m-0 p-0">
+            <div class="col-sm-6 text-right">
+              <a href="{% url 'course_module_update' course.id %}" title="Edit Models" class="btn btn-sm btn-success"><small><i class="fas fa-pen fa-xs fa-fw"></i> modules</small></a>
+            </div>
+            <div class="col-sm-6 text-left">
+              {% if course.modules.count > 0 %}
+                <a href="{% url 'module_content_list' course.modules.first.id %}" class="btn btn-primary btn-sm" title="Manage contents"><small><i class="fas fa-tasks fa-xs fa-fw"></i> contents</small></a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>You haven't created any courses yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

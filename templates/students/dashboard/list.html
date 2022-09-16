@@ -1,0 +1,38 @@
+{% extends 'students/dashboard/base.html' %}
+{% load static %}
+{% block title %}{{user}}'s courses{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-4 bg-light">
+  {% if object_list %}
+  <div class="row d-flex">
+      {% for course in object_list %}
+      <div class="col-md-4 bg-white shadow-sm card-body m-1">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+              <img src="{% if course.image %} {{course.image.url}} {% else %} {% static 'img/course1.png' %} {% endif %}" class="img-fluid p-0 m-0" alt="{{ course.title }}">
+              <h6 class="card-header">{{ course.title }}</h6>
+              <div class="card-body">
+                  <small>By {{course.owner.get_full_name}} <br>|<i class="fas fa-user-graduate fa-xs fa-fw"></i>({{course.students.all.count|add:350}})|Modules({{course.modules.count}})</small>
+                  <div class="progress my-2">
+                      <div class="progress-bar bg-primary" role="progressbar" style="width: 25%;"
+                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                  </div>
+                  <a href="{% url 'student_course_detail' course.id %}" class="badge badge-primary py-2 px-3 mt-2">Resume</a>
+              </div>
+          </div>
+          <div class="col-md-6">
+            <small>{{course.overview|truncatewords:70|linebreaks}}</small>
+          </div>
+        </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>
+            You are not enrolled in any courses yet.
+            <a href="{% url 'course_list' %}" class="nav-link">Browse courses</a>
+        </p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

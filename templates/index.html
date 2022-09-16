@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Homepage{% endblock %}
+{% block content %}
+    <div class="container-fluid bg-primary text-white pt-5">
+        <div class="row">
+            <img src="{% static 'img/image.png' %}" class="img-fluid col-sm-3" alt="Image"> 
+            <div class="col-sm-8 py-5">
+                <p class="pt-3"></p>
+                <small class="text-uppercase text-white pt-5 px-2 font-weight-bold">Welcome {{user}}</small>
+                <h1 class="display-4 px-2 font-weight-bold">Discover the <span class="border px-2 rounded-pill">best courses</span> online for the <span class="border px-2 rounded-pill">best learning.</span></h1>
+                <h4 class="px-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum sapiente eius dolores quos, sunt similique
+                     ipsum officia nam veniam tenetur, numquam tempora suscipit iste excepturi? Quae, nam! A, dolor neque.</h4>
+                <div class="row p-4">
+                    <a href="{% url 'course_list' %}" class="bg-warning nav-link text-dark">Explore Courses</a>
+                    <a href="" class="bg-white ml-5 nav-link text-dark rounded-pill"><i class="fa fa-plus" aria-hidden="true"></i> Follow</a>
+                </div>
+                <div class="row px-4">
+                    <span class="d-flex align-items-center mx-2"><i class="fa fa-check-circle fa-lg fa-fw mr-2" aria-hidden="true"></i> Professional instructors</span>
+                    <span class="d-flex align-items-center mx-2"><img src="{% static 'img/video.png' %}" class="mr-2" height="30" alt=""> Quality videos</span>
+                    <span class="d-flex align-items-center mx-2"><img src="{% static 'img/money-alt.png' %}" alt="" class="mr-2" height="25"> Affordable prices</span>
+                </div>
+            </div>
+         </div>
+    </div>
+    <div class="container-fluid">
+        <h1 class="text-uppercase py-5 text-center text-primary">Our services</h1>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-sm-3 shadow-sm m-2">
+                <img src="{% static 'img/books.png' %}" alt="books">
+                <h2 class="card-header m-0 font-weight-bold" style="color: black;">Get <br>Materials</h2>
+                <div class="card-body">
+                    <p>We will be offering classes online
+                        and grading your work, in addition
+                        the hwhole world will be able to see
+                        your work and give review</p>
+                </div>
+            </div>
+            <div class="col-sm-3 bg-primary shadow text-white m-2">
+                <img src="{% static 'img/classroom.png' %}" alt="classroom">
+                <h2 class="card-header bg-transparent font-weight-bold">Virtual <br>Classrooms</h2>
+                <div class="card-body">
+                    <p>We will be offering classes online
+                        and grading your work, in addition
+                        the hwhole world will be able to see
+                        your work and give review</p>
+                </div>
+            </div>
+            <div class="col-sm-3 shadow-sm m-2">
+                <img src="{% static 'img/laptop.png' %}" alt="learning">
+                <h2 class="card-header font-weight-bold" style="color: black;">Group <br>Learning</h2>
+                <div class="card-body">
+                    <p>We will be offering classes online
+                        and grading your work, in addition
+                        the hwhole world will be able to see
+                        your work and give review</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if categories %}
+        <h1 class="text-uppercase py-5 text-center text-primary">Our popular course categories</h1>
+        <div class="row justify-content-center py-3">
+            <a href="{% url 'course_list' %}" class="nav-link border border-dark {% if not category %}bg-warning{% endif %} rounded-pill ml-2 text-dark px-4">All</a>
+            {% for c in categories %}
+                <a href="{% url 'course_list_subject' c.slug %}" class="nav-link border border-dark {% if c == category %} bg-warning {% endif %} rounded-pill ml-2 text-dark">{{c.title}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <p class="py-2 text-center text-dark font-weight-bold">{{ courses.all | length}} Courses</p>
+        {% if courses %}
+        <div class="row justify-content-center mb-4">
+            {% for course in courses %}
+            <div class="col-sm-2 shadow m-2 p-0" style="background-color: #D9D9D9; color:black;">
+                <img src="{% if course.image %} {{course.image.url}} {% else %} {% static 'img/course1.png' %} {% endif %}" class="img-fluid p-0 m-0" alt="{{ course.title }}">
+                <div class="card-body">
+                    <h4 class="font-weight-bold">{{course.title}}</h4>
+                    <p style="font-size: 14px;">{{course.overview | truncatechars:100}}</p>
+                    <div class="row justify-content-between align-items-center px-2"><span><b>Instructor: </b><a href="">{{course.owner}}</a></span><span><b>{{ course.modules.all | length}}</b><br></span></div>
+                    <p class="row justify-content-between align-items-center px-2"><span>{% if course.price %}Ksh. {{course.price}}{% else %} <span class="badge badge-warning py-2 px-4 rounded-pill text-dark">Free</span>{% endif %}</span><span><a href="{% url 'course_detail' course.slug %}" class="btn btn-sm px-4 btn-primary rounded-pill">View</a></span></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center py-5">No Course uploaded for this category yet</p>
+        {% endif %}
+    </div>
+    <div class="container-fluid bg-warning">
+        <div class="row p-5 align-items-center justify-content-center" style="color: black;">
+           <img src="{% static 'img/review1.png' %}" class="img-fluid rounded-circle col-sm-3" alt=""> 
+           <div class="col-md-8">
+            <h1 class="display-5 font-weight-bold my-3">What our students say about us </h1>
+            <p style="font-size: large;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius unde nihil facilis optio reprehenderit blanditiis delectus maiores? Dolorem, dicta. Nobis ab iusto, repellendus aspernatur illum quia nihil velit aut delectus.</p>
+            <br>
+            <b>Jeff Odhiambo</b> <br>
+            Student <br>
+            <span>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star-half" aria-hidden="true"></i>
+            </span>
+            <div class="row justify-content-end">
+                <i class="fa fa-angle-left fa-lg bg-white p-3 m-3 rounded-circle" aria-hidden="true"></i>
+                <i class="fa fa-angle-right fa-lg bg-dark text-white p-3 m-3 rounded-circle" aria-hidden="true"></i>
+            </div>
+           </div>
+        </div>
+    </div>
+    <div class="container mb-5">
+        <h1 class="display-5 text-uppercase my-5 text-center text-primary">Contact Us</h1>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 p-0 m-0">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.06403683055!2d37.00841191501504!3d-1.1141283357774874!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f47952563285d%3A0x70d092fb85ccb757!2sVSTech%20Limited%20Company!5e0!3m2!1sen!2ske!4v1662905353950!5m2!1sen!2ske" height="500" class="col-md-10" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div class="row" style="font-size: 14px;">
+                    <a href="tel:+254795067776" class="nav-link"><i class="fa fa-phone-square fa-lg fa-fw" aria-hidden="true"></i> +254795067776</a>
+                    <a href="mailto:o.jeff3.a@gmail.com" class="nav-link"><i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> o.jeff3.a@gmail.com</a>
+                    <p class="nav-link"><i class="fa fa-address-card fa-lg fa-fw" aria-hidden="true"></i> 00100-52106 Nairobi</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{contact_form | crispy}}
+                    <input type="submit" value="Submit" class="btn btn-block btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

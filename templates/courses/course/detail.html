@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid bg-primary" style="height:100px;"></div>
+{% with subject=object.subject %}
+<div class="container-fluid bg-light" style="color:black;">
+    <div class="container">
+        <div class="row py-5 align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-4 font-weight-bold my-3">{{object.title}}</h1>
+                <span class="my-1 mx-3">
+                    <p class="text-muted small m-0">.<span><a href="{% url 'course_list_subject' subject.slug %}" class="text-decoration-none mx-1">{{subject.title}}</a></span> . Released: {{object.created}}</p>
+                    <p class="text-dark small ml-2 my-0 p-0">Ratings:
+                        <span class="text-warning">
+                        <i class="fas fa-star fa-xs fa-fw"></i>
+                        <i class="fas fa-star fa-xs fa-fw"></i>
+                        <i class="fas fa-star fa-xs fa-fw"></i>
+                        <i class="fas fa-star fa-xs fa-fw"></i>
+                        <i class="fa fa-star-half fa-xs fa-fw" aria-hidden="true"></i>
+                        </span>
+                        <i class="fas fa-user-graduate fa-xs fa-fw"></i>({{object.students.all|length|add:350}})
+                    </p>
+                    <p class="mt-2 mx-2 mb-0">{% if object.price %}Ksh. {{object.price}}{% else %}Free{% endif %}</p>
+                </span>
+                    {% if request.user.is_authenticated %}
+                    <form action="{% url 'student_enroll_course' %}" method="post">
+                      {{ enroll_form }}
+                      {% csrf_token %}
+                      <input type="submit" class="btn btn-primary" value="Enroll now">
+                    </form>
+                    {% else %}
+                    <div class="row p-3">
+                        <a href="{% url 'account_signup' %}" class="btn btn-primary">Register</a>
+                        <a href="{% url 'account_login' %}" class="btn btn-outline-primary px-3 mx-3">Login</a>
+                    </div>
+                    {% endif %}
+            </div>
+            <div class="col-md-4">
+                <img src="{% if object.image %} {{object.image.url}} {% else %} {% static 'img/course1.png' %} {% endif %}" class="img-fluid" alt="{{object.title}}" title="{{object.title}}">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center py-4">
+        <div class="col-md-6">
+            <h6 class="text-uppercase text-dark">What's include?</h6>
+            <ul style="list-style-image: url('/static/img/mark.png');">
+                <li>1 Project File</li>
+                <li>{{object.modules.count}} Chapter Quizes</li>
+                <li>Access across devices</li>
+                <li>Certificate</li>
+            </ul>
+            <section>
+                <header class="text-dark"><h6>Course Overview</h6></header>
+                <small>{{object.overview|linebreaks}}</small>
+            </section>
+            <section>
+                <header><h6 class="text-dark">Skills Covered</h6></header>
+                {% if object.skills %}
+                    <small class="btn btn-outline-light">Skills</small>
+                {% else %}
+                    <small>No updated skills yet</small>
+                {% endif %}
+            </section>
+            <section class="my-2">
+                <header><h5 class="text-dark">Instractor</h5></header>
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <img src="{% if object.owner.profile.profile_pic %}{{object.owner.profile.profile_pic}}{% else %}{% static 'img/undraw_profile.svg' %}{% endif %}" class="img-fluid rounded-circle" alt="{{object.owner.get_full_name}}'s Profile" title="{{object.owner.get_full_name}}'s Profile">
+                    </div>
+                    <div class="col-md-10">
+                        <p class="text-dark mb-0">{{object.owner.get_full_name}}</p>
+                        <a href="mailto:{{object.owner.email}}"><small>{{object.owner.email}}</small></a>
+                        {% if object.owner.profile.phone_number %}
+                            <a href="tel:{{object.owner.profile.phone_number}}"><small>{{object.owner.profile.phone_number}}</small></a>
+                        {% endif %} <br>
+                        <a href="" class="bg-primary text-white text-decoration-none px-1 rounded-pill"><small><i class="fa fa-plus" aria-hidden="true"></i> Follow</small></a>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-5 p-2">
+            <a href="" class="text-center text-dark text-decoration-none"><p class="border py-2">Share this Course</p></a>
+            <section class="col-xl-12 border mt-3 p-2">
+                <header><h5 class="text-dark m-2">Modules</h5></header>
+                <ul class="list-unstyled m-3">
+                    {% if object.modules %}
+                        {% for module in object.modules.all %}
+                            <li class="my-1 bg-light p-2">{{module.order|add:1}} - {{module.title}}</li>
+                        {% endfor %}
+                    {% else %}
+                        <small>No modules yet</small>
+                    {% endif %}
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
+{% endwith %}
+{% endblock %}
