@@ -24,7 +24,7 @@ Teachers dashboard and students dashboard are different(teachers: green, student
 4. activate the vartual environtment
    `source env/bin/activate`
 5. install the requirements
-   `pip install -r requirements.txt `
+   `pip install -r requirements.txt`
 6. make migrations
     `python manage.py makemigrations`
 7. migrate
@@ -35,6 +35,6 @@ Teachers dashboard and students dashboard are different(teachers: green, student
    `python manage.py runserver`
 
 ## Contact
-Email: o.jeff3.a@gmail.com
+Email: admin@vs-academy.tech
 Phone: [+254795067776](tel:+254795067776)
-website: [vstech.live](http://vstech.live)
+website: [vs-academy.tech](https://vs-academy.tech)
