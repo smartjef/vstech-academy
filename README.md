@@ -15,7 +15,7 @@ Teachers dashboard and students dashboard are different(teachers: green, student
 ## How to run the project
 
 1. clone the project
-`git clone https://github.com/Jeff992/vstech-academy.git`
+`git clone https://github.com/smartjef/vstech-academy.git`
 
 2. Cd into vstech-academy
  `cd vstech-academy`
