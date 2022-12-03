@@ -23,9 +23,13 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates/')
 SECRET_KEY = 'django-insecure-dm(phiszrp(6ay8&lk7lkoj@d+6oal7$&g+33do7p#9!yl3ijz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['vsacademy-1.azurewebsites.net']
+ALLOWED_HOSTS = [
+    'vsacademy-1.azurewebsites.net',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
